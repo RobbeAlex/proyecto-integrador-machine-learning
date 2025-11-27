@@ -26,11 +26,9 @@ ENV/
 *.sqlite3
 Collins_Demand_DB.db
 
-# Si quieres subir los CSV de datos porque son pequeños,
-# deja comentada la siguiente línea. Si son muy grandes, descoméntala:
 # data/raw/*.csv
-# *.csv
-# *.xlsx
+*.csv
+*.xlsx
 
 # --- Archivos del Sistema Operativo ---
 .DS_Store
