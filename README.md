@@ -40,20 +40,37 @@ El flujo de trabajo sigue el estándar de Ciencia de Datos:
 
 ## ⚙️ Metodología y Fundamentación enfocada en Matemáticas
 La predicción final $\hat{y}_{t}$ se define como el promedio aritmético de tres predictores base, aprovechando el **Teorema del Ensamble** para reducir la varianza del error total.
-$$\hat{y}_{t} = \frac{1}{3}(\hat{y}_{RF}(t) + \hat{y}_{SARIMA}(t) + \hat{y}_{Prophet}(t))$$
+
+$$
+\hat{y}_{t} = \frac{1}{3}(\hat{y}_{RF}(t) + \hat{y}_{SARIMA}(t) + \hat{y}_{Prophet}(t))
+$$
 
 ### Componentes del Modelo:
 1.  **Random Forest Regressor (Componente No Paramétrico):**
     * Utiliza 100 estimadores y una profundidad máxima de 8.
     * Minimiza el MSE reduciendo la varianza mediante la segmentación del espacio de decisión.
-    * Fórmula aproximada: $${\hat{y}_{RF}}=\frac{1}{M}\sum_{m=1}^{M}{h_m(x)}$$
+    * Fórmula aproximada:
+      
+$$
+{\hat{y}_{RF}}=\frac{1}{M}\sum_{m=1}^{M}{h_m(x)}
+$$
+      
 2.  **SARIMA (Componente Estocástico Lineal):**
     * Configuración: Orden (1,1,1) con estacionalidad (1,1,1,12).
     * Optimizado mediante Estimación de Máxima Verosimilitud (MLE).
-    * Ecuación general: $\Phi_{P}(B)\Phi_{P}(B^{s})(1-B)^{d}(1-B^{s})^{D}y_{t} = \theta_{q}(B)\Theta_{Q}(B^{s})\epsilon_{t}$.
+    * Ecuación general:
+      
+$$
+\Phi_{P}(B)\Phi_{P}(B^{s})(1-B)^{d}(1-B^{s})^{D}y_{t} = \theta_{q}(B)\Theta_{Q}(B^{s})\epsilon_{t}
+$$
+      
 3.  **Prophet (Componente Aditivo Generalizado):**
     * Descompone la serie en tendencia, estacionalidad (Fourier) y efectos de días festivos.
-    * Modelo: $y(t) = g(t) + s(t) + h(t) + \epsilon_{t}$.
+    * Modelo:
+      
+$$
+y(t) = g(t) + s(t) + h(t) + \epsilon_{t}
+$$
 
 ## 🚀 Resultados y Evaluación
 La evaluación se realizó utilizando la **Raíz del Error Cuadrático Medio (RMSE)**. Aunque SARIMA obtuvo el menor error individual, se seleccionó el Ensamble por su estabilidad y robustez estocástica ante la volatilidad del mercado.
