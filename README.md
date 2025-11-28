@@ -30,18 +30,42 @@ Este proyecto es una solución integral de **Machine Learning** diseñada para o
 * **Visualización:** Plotly, Matplotlib, Seaborn.
 * **Aplicación Web:** Streamlit.
 
-## 📂 Estructura del Proyecto
+## 📊 Metodología enfocada en Machine Learning e Inferencia Bayesiana
+El flujo de trabajo sigue el estándar de Ciencia de Datos:
+1. ETL (Extracción y Limpieza): Procesamiento del dataset de facturación, limpieza de nulos y conversión a formato transaccional.
+2. EDA (Análisis Exploratorio): Descomposición estacional para entender tendencias, ciclos de venta y anomalías.
+3. Modelado: Entrenamiento de modelos individuales y combinación mediante promedio ponderado (Ensamble).
+4. Evaluación: Uso de RMSE para medir el desempeño fuera de la muestra.
+5. Despliegue: Implementación del Dashboard para consumo final del usuario de negocio.
 
-```text
-├── data/                   # Archivos CSV de entrada y base de datos SQLite generada
-├── notebooks/              # Jupyter Notebook con el EDA y entrenamiento del modelo
-├── src/                    # Código fuente de la aplicación
-│   ├── app_dashboard.py    # Interfaz gráfica y lógica de visualización
-│   └── db_manager.py       # Módulo de conexión y gestión de base de datos
-├── run.py                  # Script lanzador principal (Entry Point)
-├── requirements.txt        # Lista de dependencias y librerías
-└── README.md               # Documentación del proyecto
-```
+## ⚙️ Metodología y Fundamentación enfocada en Matemáticas
+La predicción final $\hat{y}_{t}$ se define como el promedio aritmético de tres predictores base, aprovechando el **Teorema del Ensamble** para reducir la varianza del error total.
+$$\hat{y}_{t} = \frac{1}{3}(\hat{y}_{RF}(t) + \hat{y}_{SARIMA}(t) + \hat{y}_{Prophet}(t))$$
+
+### Componentes del Modelo:
+1.  **Random Forest Regressor (Componente No Paramétrico):**
+    * Utiliza 100 estimadores y una profundidad máxima de 8.
+    * Minimiza el MSE reduciendo la varianza mediante la segmentación del espacio de decisión.
+    * Fórmula aproximada: $${\hat{y}_{RF}}=\frac{1}{M}\sum_{m=1}^{M}{h_m(x)}$$
+2.  **SARIMA (Componente Estocástico Lineal):**
+    * Configuración: Orden (1,1,1) con estacionalidad (1,1,1,12).
+    * Optimizado mediante Estimación de Máxima Verosimilitud (MLE).
+    * Ecuación general: $\Phi_{P}(B)\Phi_{P}(B^{s})(1-B)^{d}(1-B^{s})^{D}y_{t} = \theta_{q}(B)\Theta_{Q}(B^{s})\epsilon_{t}$.
+3.  **Prophet (Componente Aditivo Generalizado):**
+    * Descompone la serie en tendencia, estacionalidad (Fourier) y efectos de días festivos.
+    * Modelo: $y(t) = g(t) + s(t) + h(t) + \epsilon_{t}$.
+
+## 🚀 Resultados y Evaluación
+La evaluación se realizó utilizando la **Raíz del Error Cuadrático Medio (RMSE)**. Aunque SARIMA obtuvo el menor error individual, se seleccionó el Ensamble por su estabilidad y robustez estocástica ante la volatilidad del mercado.
+
+| Modelo | RMSE | Observación |
+| :--- | :--- | :--- |
+| **SARIMA** | 119,770.02 | Mejor desempeño individual. |
+| **Ensemble (Promedio)** | **127,591.65** | **Modelo Seleccionado (Mejor balance Sesgo-Varianza)**. |
+| **Random Forest** | 148,898.06 | Alta varianza. |
+| **Prophet** | 156,091.13 | Alto sesgo (suavizado excesivo). |
+
+El modelo final entrega rangos de certeza (`Pronostico_Min` y `Pronostico_Max`) cruciales para la gestión de stock de seguridad.
 
 ## ⚙️ Instalación y Uso
 
@@ -89,10 +113,15 @@ python run.py
 ```
 El navegador se abrirá automáticamente en http://localhost:8501
 
-## 📊 Metodología del Proyecto
-El flujo de trabajo sigue el estándar de Ciencia de Datos:
-1. ETL (Extracción y Limpieza): Procesamiento del dataset de facturación, limpieza de nulos y conversión a formato transaccional.
-2. EDA (Análisis Exploratorio): Descomposición estacional para entender tendencias, ciclos de venta y anomalías.
-3. Modelado: Entrenamiento de modelos individuales y combinación mediante promedio ponderado (Ensamble).
-4. Evaluación: Uso de RMSE para medir el desempeño fuera de la muestra.
-5. Despliegue: Implementación del Dashboard para consumo final del usuario de negocio.
+## 📂 Estructura del Proyecto
+
+```text
+├── data/                   # Archivos CSV de entrada y base de datos SQLite generada
+├── notebooks/              # Jupyter Notebook con el EDA y entrenamiento del modelo
+├── src/                    # Código fuente de la aplicación
+│   ├── app_dashboard.py    # Interfaz gráfica y lógica de visualización
+│   └── db_manager.py       # Módulo de conexión y gestión de base de datos
+├── run.py                  # Script lanzador principal (Entry Point)
+├── requirements.txt        # Lista de dependencias y librerías
+└── README.md               # Documentación del proyecto
+```
