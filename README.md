@@ -63,7 +63,9 @@ $$
 $$
 \Phi_{P}(B)\Phi_{P}(B^{s})(1-B)^{d}(1-B^{s})^{D}y_{t} = \theta_{q}(B)\Theta_{Q}(B^{s})\epsilon_{t}
 $$
-      
+
+   Donde B es el operador de retardo, y $\phi,\Phi,\theta,\ \Theta$ son los polinomios de parámetros autorregresivos y de media móvil
+
 3.  **Prophet (Componente Aditivo Generalizado):**
     * Descompone la serie en tendencia, estacionalidad (Fourier) y efectos de días festivos.
     * Modelo:
